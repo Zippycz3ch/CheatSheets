@@ -26,4 +26,3 @@ testRunner.testCase.testSuite.project.getPropertyValue("value") // přístup k p
 
 def project=testRunner.testCase.testSuite.project
 
-project.getPropertyValue("value") // get property from project level

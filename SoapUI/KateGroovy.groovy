@@ -1,11 +1,8 @@
 //generate SID - 32 length
 
 def currentTM = new java.util.Date();
-
 def propertySID = "xSoapUIxTrungx" + (new java.text.SimpleDateFormat("yyyyMMddHHmmss")).format(currentTM) + "x";
-
 def retRnd = String.valueOf(Math.round(Math.random()*999999))
-
 def count = 32 - propertySID.length() - retRnd.length()
 
 for(i=0; i<count; i++)  propertySID += '0';
@@ -14,26 +11,20 @@ propertySID += retRnd
 
 testRunner.getTestCase().setPropertyValue("SID", propertySID)
 
- 
-
 //generate CreateDateTime - 2001-12-17T09:30:47.0
 
 def propertyCDT =  (new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")).format(currentTM)
-
 testRunner.getTestCase().setPropertyValue("CreateDateTime", propertyCDT)
-
-
 
 //generate random NamePrefix
 
 import org.apache.commons.lang.RandomStringUtils
+
 int randomStringLength = 5
 String charset = (('a'..'z') + ('A'..'Z') ).join()
 String randomString = RandomStringUtils.random(randomStringLength, charset.toCharArray())
 
 testRunner.getTestCase().setPropertyValue("NamePrefix", randomString) 
-
-
 
 //generate BirthNumber
 
