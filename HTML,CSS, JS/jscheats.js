@@ -30,7 +30,7 @@ if (password.length > 6) {
     console.log("Kráské heslo")
 }
 
-const password = prompt("Enter password");          // logical AND
+const password2 = prompt("Enter password");          // logical AND
 
 if (password.length > 6 && password.indexOf(' ') === -1) {
     console.log("Heslo ok")
@@ -65,13 +65,13 @@ switch (day) {
 
 // Arrays
 
-let abc = [];                                           // Empty array
+let a = [];                                           // Empty array
 
-let abc = ['red', 'orange', 'yellow'];                  // Array of strings
+let b = ['red', 'orange', 'yellow'];                  // Array of strings
 
-let abc = [19, 20, 56, 12, 51];                         // Array of numbers
+let c = [19, 20, 56, 12, 51];                         // Array of numbers
 
-let abc = [true, 68, 'cat', null];                      // Mixed array
+let d = [true, 68, 'cat', null];                      // Mixed array
 
 Array[1]                                                // Select second position from array
 Array[1][1]                                             // Select second letter from second position from array
@@ -92,7 +92,7 @@ Array[3][1] = "Item";                                   // Adds item to nested a
 const dataData = { data1: 1337, data2: 7331, data3: '13.37', data4: ['Red', 'Blue', 'Yellow'] }             // Object
 dataData['data4']                                                                                           // Calling data in object
 dataData.data4                                                                                              // Calling data in object
-const dataData = [{ data1: 1337, data2: 7331, data3: '13.37', data4: ['Red', 'Blue', 'Yellow'] },           // Nesting objects and arrays
+const dataData2 = [{ data1: 1337, data2: 7331, data3: '13.37', data4: ['Red', 'Blue', 'Yellow'] },           // Nesting objects and arrays
 { data1: 1338, data2: 8331, data3: '13.38', data4: ['R3d', '8lue', 'Y3ll0w'] }
 ]
 
