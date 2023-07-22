@@ -9,8 +9,13 @@ var jsonData = pm.response.json();
 
 const idBoard = jsonData.id;
 
+// Set and get for collection variables
+const constnameX = pm.collectionVariables.get("constnameX");
+
+pm.collectionVariables.set("variableName", variableValue);
+
 // Set and get for env variables
-const boardName2 = pm.environment.get("boardName");
+const constName = pm.environment.get("constName");
 
 pm.environment.set("toDoListId", toDoListId);
 
@@ -20,6 +25,15 @@ pm.test("Calendar is disabled", () => {
     const jsonData = pm.response.json();
     pm.expect(jsonData.prefs.calendarFeedEnabled).to.eql(false);
 });
+
+pm.test("Should contain the reference id", () => {
+    pm.expect(response.json.referenceId).to.eql(pm.globals.get("referenceId"));
+  });
+
+pm.test("Should contain iteration data", () => {
+    pm.expect(response.json.customerId).to.eql(pm.iterationData.get("customerId"));
+  });
+  
 
 // Length of array
 
@@ -42,7 +56,6 @@ pm.expect(pm.response.headers.get('X-Cache')).to.eql('HIT');
 // Cookie exists:
 
 pm.expect(pm.cookies.has('sessionId')).to.be.true; 
-
 
 // Cookie has value:
 
