@@ -9,8 +9,13 @@ var jsonData = pm.response.json();
 
 const idBoard = jsonData.id;
 
+// Set and get for collection variables
+const constnameX = pm.collectionVariables.get("constnameX");
+
+pm.collectionVariables.set("variableName", variableValue);
+
 // Set and get for env variables
-const boardName2 = pm.environment.get("boardName");
+const constName = pm.environment.get("constName");
 
 pm.environment.set("toDoListId", toDoListId);
 
@@ -62,7 +67,6 @@ pm.expect(pm.response.headers.get('X-Cache')).to.eql('HIT');
 // Cookie exists:
 
 pm.expect(pm.cookies.has('sessionId')).to.be.true; 
-
 
 // Cookie has value:
 
