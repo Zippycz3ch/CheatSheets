@@ -1,3 +1,14 @@
+// POST - CREATE
+// GET - RETRIVE
+// HEAD - RETRIVE HEADER
+// PUT - UPDATE
+// PATCH - REPLACE
+// DELETE - DELETE
+
+// Postman request with Query Params & Path var
+
+{{baseUrl}}/1/boards/:id?key={{trelloKey}}&token={{trelloToken}}
+
 // Basic 200OK
 
 pm.test("Status code is 200", function () {
