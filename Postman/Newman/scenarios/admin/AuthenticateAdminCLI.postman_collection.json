@@ -1,0 +1,219 @@
+{
+	"info": {
+		"_postman_id": "211f91b6-d5f7-445c-a1b0-f674e09d1c37",
+		"name": "Authenticate Admin CLI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28992079"
+	},
+	"item": [
+		{
+			"name": "TokenAuth/Authenticate -ADMIN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"// Check if the accessToken exists and is not null\r",
+							"pm.test(\"Access Token is not null\", function () {\r",
+							"    pm.expect(jsonData.result.accessToken).to.not.equal(null);\r",
+							"});\r",
+							"\r",
+							"let admin_access_token = jsonData.result.accessToken;\r",
+							"let admin_refresh_token = jsonData.result.refreshToken;\r",
+							"let admin_user_id = jsonData.result.userId;\r",
+							"\r",
+							"pm.globals.set(\"admin_user_id\", admin_user_id);\r",
+							"pm.globals.set(\"admin_access_token\", admin_access_token);\r",
+							"pm.globals.set(\"admin_refresh_token\", admin_refresh_token);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required properties\", function () {\r",
+							"    pm.expect(jsonData).to.have.property(\"result\");\r",
+							"    pm.expect(jsonData).to.have.property(\"targetUrl\");\r",
+							"    pm.expect(jsonData).to.have.property(\"success\");\r",
+							"    pm.expect(jsonData).to.have.property(\"error\");\r",
+							"    pm.expect(jsonData).to.have.property(\"unAuthorizedRequest\");\r",
+							"    pm.expect(jsonData).to.have.property(\"__abp\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result object has the required properties\", function () {\r",
+							"    pm.expect(jsonData.result).to.have.property(\"accessToken\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"encryptedAccessToken\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"expireInSeconds\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"shouldResetPassword\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"passwordResetCode\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"userId\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"requiresTwoFactorVerification\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"twoFactorAuthProviders\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"twoFactorRememberClientToken\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"returnUrl\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"refreshToken\");\r",
+							"    pm.expect(jsonData.result).to.have.property(\"refreshTokenExpireInSeconds\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response schema is valid\", function () {\r",
+							"    var schema = {\r",
+							"        type: \"object\",\r",
+							"        properties: {\r",
+							"            result: {\r",
+							"                type: \"object\",\r",
+							"                properties: {\r",
+							"                    accessToken: { type: \"string\" },\r",
+							"                    encryptedAccessToken: { type: \"string\" },\r",
+							"                    expireInSeconds: { type: \"number\" },\r",
+							"                    shouldResetPassword: { type: \"boolean\" },\r",
+							"                    passwordResetCode: { type: [\"null\", \"string\"] },\r",
+							"                    userId: { type: \"number\" },\r",
+							"                    requiresTwoFactorVerification: { type: \"boolean\" },\r",
+							"                    twoFactorAuthProviders: { type: [\"null\", \"array\"] },\r",
+							"                    twoFactorRememberClientToken: { type: [\"null\", \"string\"] },\r",
+							"                    returnUrl: { type: \"string\" },\r",
+							"                    refreshToken: { type: \"string\" },\r",
+							"                    refreshTokenExpireInSeconds: { type: \"number\" }\r",
+							"                },\r",
+							"                required: [\r",
+							"                    \"accessToken\",\r",
+							"                    \"encryptedAccessToken\",\r",
+							"                    \"expireInSeconds\",\r",
+							"                    \"shouldResetPassword\",\r",
+							"                    \"passwordResetCode\",\r",
+							"                    \"userId\",\r",
+							"                    \"requiresTwoFactorVerification\",\r",
+							"                    \"twoFactorAuthProviders\",\r",
+							"                    \"twoFactorRememberClientToken\",\r",
+							"                    \"returnUrl\",\r",
+							"                    \"refreshToken\",\r",
+							"                    \"refreshTokenExpireInSeconds\"\r",
+							"                ]\r",
+							"            },\r",
+							"            targetUrl: { type: [\"null\", \"string\"] },\r",
+							"            success: { type: \"boolean\" },\r",
+							"            error: { type: [\"null\", \"string\"] },\r",
+							"            unAuthorizedRequest: { type: \"boolean\" },\r",
+							"            __abp: { type: \"boolean\" }\r",
+							"        },\r",
+							"        required: [\r",
+							"            \"result\",\r",
+							"            \"targetUrl\",\r",
+							"            \"success\",\r",
+							"            \"error\",\r",
+							"            \"unAuthorizedRequest\",\r",
+							"            \"__abp\"\r",
+							"        ]\r",
+							"    };\r",
+							"\r",
+							"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				},
+				"followRedirects": false
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Abp-TenantId",
+						"value": "{{Abp-TenantId}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userNameOrEmailAddress\": \"{{user_admin}}\",\r\n    \"password\": \"{{user_admin_secret}}\",\r\n    \"rememberClient\": true,\r\n    \"singleSignIn\": true,\r\n    \"returnUrl\": \"app.roger.dev.myq-solution.com/account/login\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/TokenAuth/Authenticate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"TokenAuth",
+						"Authenticate"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Abp-TenantId",
+			"value": "394",
+			"type": "string"
+		},
+		{
+			"key": "user_admin_secret",
+			"value": "Roger123",
+			"type": "string"
+		},
+		{
+			"key": "user_admin",
+			"value": "admin",
+			"type": "string"
+		},
+		{
+			"key": "admin_user_id",
+			"value": ""
+		},
+		{
+			"key": "admin_access_token",
+			"value": ""
+		},
+		{
+			"key": "admin_refresh_token",
+			"value": ""
+		}
+	]
+}

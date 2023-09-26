@@ -1,0 +1,2 @@
+﻿Dataset Name,firstname,lastname,username,useremail,phoneNumber,userPassword,isActive,shouldChangePasswordOnNextLogin,isTwoFactorEnabled,isLockoutEnabled,sendActivationEmail,assignedRoleNames,setRandomPassword,organizationUnits,resetPin,cards
+Admin,{% faker name.firstName %},{% faker name.lastName %},{{firstname}}{% faker name.middleName %}{{lastname}},{{firstname}}.{{lastname}}@rogertest.dev,,{% faker internet.password %},true,false,true,false,false,Admin,false,,true,null

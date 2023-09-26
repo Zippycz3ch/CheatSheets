@@ -1,0 +1,7 @@
+﻿Dataset Name,displayName,serial_number,client_id,printer_brand,deviceModel,fwVersion,dealerCatalogNumber,isActive,assignToDefaultCfgProfile,ipAddresses,hasTerminal,hostNames
+Random SN,Printer - {% faker internet.password %},SN - {% faker internet.password %},device,Kyocera,null,null,null,true,true,192.168.0.1,true,PrinterHostName1
+Static SN,Printer - {% faker internet.password %},SN- STATIC,device,Kyocera,null,null,null,true,true,192.168.0.2,true,PrinterHostName2
+Static SN - Random brand,Printer - {% faker internet.password %},SN- STATIC,device,{% faker internet.password %},null,null,null,true,true,192.168.0.2,true,PrinterHostName2
+Random SN lightweight,Printer - {% faker internet.password %},SN- LW - {% faker internet.password %},device,Kyocera,null,null,null,true,true,192.168.0.3,false,PrinterHstName3
+STATIC SN lightweight,Printer - {% faker internet.password %},SN- LW -STATIC,device,Kyocera,null,null,null,true,true,192.168.0.3,false,PrinterHstName3
+Static SN lightweight - Random brand,Printer - {% faker internet.password %},SN- LW -STATIC,device,{% faker internet.password %},null,null,null,true,true,192.168.0.3,false,PrinterHstName3

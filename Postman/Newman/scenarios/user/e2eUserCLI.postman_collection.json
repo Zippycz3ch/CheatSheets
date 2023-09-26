@@ -1,0 +1,685 @@
+{
+	"info": {
+		"_postman_id": "be84da10-a45b-4940-9c41-7bcc9144cbf4",
+		"name": "E2E User CLI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28992079"
+	},
+	"item": [
+		{
+			"name": "User/CreateOrUpdateUser - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains the expected fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.success).to.exist;\r",
+							"    pm.expect(responseData.unAuthorizedRequest).to.exist;\r",
+							"    pm.expect(responseData.__abp).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Success field is true\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.success).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error field is null\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.error).to.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body matches the expected schema\", function () {\r",
+							"    var schema = {\r",
+							"        type: \"object\",\r",
+							"        properties: {\r",
+							"            result: {\r",
+							"                type: [\"object\", \"null\"]\r",
+							"            },\r",
+							"            targetUrl: {\r",
+							"                type: [\"string\", \"null\"]\r",
+							"            },\r",
+							"            success: {\r",
+							"                type: \"boolean\"\r",
+							"            },\r",
+							"            error: {\r",
+							"                type: [\"object\", \"null\"]\r",
+							"            },\r",
+							"            unAuthorizedRequest: {\r",
+							"                type: \"boolean\"\r",
+							"            },\r",
+							"            __abp: {\r",
+							"                type: \"boolean\"\r",
+							"            }\r",
+							"        },\r",
+							"        required: [\"result\", \"targetUrl\", \"success\", \"error\", \"unAuthorizedRequest\", \"__abp\"]\r",
+							"    };\r",
+							"\r",
+							"    var response = pm.response.json();\r",
+							"    pm.expect(tv4.validate(response, schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"firstname\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));\r",
+							"pm.collectionVariables.set(\"lastname\", pm.variables.replaceIn(\"{{$randomLastName}}\"));\r",
+							"pm.collectionVariables.set(\"userName\", pm.variables.replaceIn(\"{{$randomUserName}}\"));\r",
+							"pm.collectionVariables.set(\"userEmail\", pm.variables.replaceIn(\"{{$randomEmail}}\"));\r",
+							"pm.collectionVariables.set(\"userPassword\", pm.variables.replaceIn(\"{{$randomPassword}}\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Abp-TenantId",
+						"value": "{{Abp-TenantId}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"user\": {\r\n    \"name\": \"{{firstname}}\",\r\n    \"surname\": \"{{lastname}}\", \r\n    \"userName\": \"{{userName}}\",\r\n    \"emailAddress\": \"{{userEmail}}\",\r\n    \"phoneNumber\": \"\",\r\n    \"password\": \"{{userPassword}}\",\r\n    \"isActive\": true,\r\n    \"shouldChangePasswordOnNextLogin\": true,\r\n    \"isTwoFactorEnabled\": true,\r\n    \"isLockoutEnabled\": false\r\n  },\r\n  \"assignedRoleNames\": [\"User\"],\r\n  \"sendActivationEmail\": false,\r\n  \"setRandomPassword\": false,\r\n  \"organizationUnits\": [],\r\n  \"resetPin\": true,\r\n  \"cards\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/User/CreateOrUpdateUser",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"User",
+						"CreateOrUpdateUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TokenAuth/Authenticate - Authenticate Created User",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"let user_access_token = jsonData.result.accessToken;\r",
+							"let user_refresh_token = jsonData.result.refreshToken;\r",
+							"let userId = jsonData.result.userId;\r",
+							"\r",
+							"pm.collectionVariables.set(\"user_access_token\", user_access_token);\r",
+							"pm.collectionVariables.set(\"user_refresh_token\", user_refresh_token);\r",
+							"pm.collectionVariables.set(\"userId\", userId);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Success field is true\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.success).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error field is null\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.error).to.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response schema is valid\", function () {\r",
+							"    var schema = {\r",
+							"        type: \"object\",\r",
+							"        properties: {\r",
+							"            result: {\r",
+							"                type: \"object\",\r",
+							"                properties: {\r",
+							"                    accessToken: { type: [\"string\", \"null\"] },\r",
+							"                    encryptedAccessToken: { type: [\"string\", \"null\"] },\r",
+							"                    expireInSeconds: { type: \"number\" },\r",
+							"                    shouldResetPassword: { type: \"boolean\" },\r",
+							"                    passwordResetCode: { type: \"string\" },\r",
+							"                    userId: { type: \"number\" },\r",
+							"                    requiresTwoFactorVerification: { type: \"boolean\" },\r",
+							"                    twoFactorAuthProviders: { type: [\"array\", \"null\"] },\r",
+							"                    twoFactorRememberClientToken: { type: [\"string\", \"null\"] },\r",
+							"                    returnUrl: { type: [\"string\", \"null\"] },\r",
+							"                    refreshToken: { type: [\"string\", \"null\"] },\r",
+							"                    refreshTokenExpireInSeconds: { type: \"number\" }\r",
+							"                },\r",
+							"                required: [\"accessToken\", \"encryptedAccessToken\", \"expireInSeconds\", \"shouldResetPassword\", \"passwordResetCode\", \"userId\", \"requiresTwoFactorVerification\", \"twoFactorAuthProviders\", \"twoFactorRememberClientToken\", \"returnUrl\", \"refreshToken\", \"refreshTokenExpireInSeconds\"]\r",
+							"            },\r",
+							"            targetUrl: { type: [\"string\", \"null\"] },\r",
+							"            success: { type: \"boolean\" },\r",
+							"            error: { type: [\"object\", \"null\"] },\r",
+							"            unAuthorizedRequest: { type: \"boolean\" },\r",
+							"            __abp: { type: \"boolean\" }\r",
+							"        },\r",
+							"        required: [\"result\", \"targetUrl\", \"success\", \"error\", \"unAuthorizedRequest\", \"__abp\"]\r",
+							"    };\r",
+							"\r",
+							"    var response = pm.response.json();\r",
+							"    pm.expect(tv4.validate(response, schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				},
+				"followRedirects": false
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Abp-TenantId",
+						"value": "{{tenant_id}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userNameOrEmailAddress\": \"{{userName}}\",\r\n    \"password\": \"{{userPassword}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/TokenAuth/Authenticate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"TokenAuth",
+						"Authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User/GetUserForEdit - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate the result object\", function () {\r",
+							"    pm.expect(jsonData.result).to.exist.and.to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Email matches\", () => {\r",
+							"    pm.expect(jsonData.result.user.emailAddress).to.eql(pm.collectionVariables.get(\"userEmail\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ID matches\", () => {\r",
+							"    pm.expect(jsonData.result.user.id).to.eql(pm.collectionVariables.get(\"userId\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User is active\", () => {\r",
+							"    pm.expect(jsonData.result.user.isActive).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"2FA is enabled\", () => {\r",
+							"    pm.expect(jsonData.result.user.isTwoFactorEnabled).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User role is correct\", () => {\r",
+							"    pm.expect(jsonData.result.roles.some(role => role.roleName === (\"User\") && role.isAssigned)).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/User/GetUserForEdit?Id={{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"User",
+						"GetUserForEdit"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User/UpdateUser - Update User by userId Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains the expected fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.success).to.exist;\r",
+							"    pm.expect(responseData.unAuthorizedRequest).to.exist;\r",
+							"    pm.expect(responseData.__abp).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Success field is true\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.success).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error field is null\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.error).to.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body matches the expected schema\", function () {\r",
+							"    var schema = {\r",
+							"        type: \"object\",\r",
+							"        properties: {\r",
+							"            result: {\r",
+							"                type: [\"object\", \"null\"]\r",
+							"            },\r",
+							"            targetUrl: {\r",
+							"                type: [\"string\", \"null\"]\r",
+							"            },\r",
+							"            success: {\r",
+							"                type: \"boolean\"\r",
+							"            },\r",
+							"            error: {\r",
+							"                type: [\"object\", \"null\"]\r",
+							"            },\r",
+							"            unAuthorizedRequest: {\r",
+							"                type: \"boolean\"\r",
+							"            },\r",
+							"            __abp: {\r",
+							"                type: \"boolean\"\r",
+							"            }\r",
+							"        },\r",
+							"        required: [\"result\", \"targetUrl\", \"success\", \"error\", \"unAuthorizedRequest\", \"__abp\"]\r",
+							"    };\r",
+							"\r",
+							"    var response = pm.response.json();\r",
+							"    pm.expect(tv4.validate(response, schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"userName\", pm.variables.replaceIn(\"{{$randomUserName}}\"));\r",
+							"pm.collectionVariables.set(\"userEmail\", pm.variables.replaceIn(\"{{$randomEmail}}\"));\r",
+							"pm.collectionVariables.set(\"userPassword\", pm.variables.replaceIn(\"{{$randomPassword}}\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Abp-TenantId",
+						"value": "{{Abp-TenantId}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": {\r\n        \"id\": {{userId}},\r\n        \"name\": \"{{firstname}}\",\r\n        \"surname\": \"{{lastname}}\",\r\n        \"userName\": \"{{userName}}\",\r\n        \"emailAddress\": \"{{userEmail}}\",\r\n        \"phoneNumber\": \"\",\r\n        \"password\": \"{{userPassword}}\",\r\n        \"isActive\": true,\r\n        \"shouldChangePasswordOnNextLogin\": true,\r\n        \"isTwoFactorEnabled\": true,\r\n        \"isLockoutEnabled\": false\r\n    },\r\n    \"assignedRoleNames\": [\r\n        \"User\"\r\n    ],\r\n    \"sendActivationEmail\": false,\r\n    \"setRandomPassword\": false,\r\n    \"organizationUnits\": [],\r\n    \"resetPin\": true,\r\n    \"cards\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/User/CreateOrUpdateUser",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"User",
+						"CreateOrUpdateUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User/GetUserForEdit - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate the result object\", function () {\r",
+							"    pm.expect(jsonData.result).to.exist.and.to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Email matches\", () => {\r",
+							"    pm.expect(jsonData.result.user.emailAddress).to.eql(pm.collectionVariables.get(\"userEmail\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ID matches\", () => {\r",
+							"    pm.expect(jsonData.result.user.id).to.eql(pm.collectionVariables.get(\"userId\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User is active\", () => {\r",
+							"    pm.expect(jsonData.result.user.isActive).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"2FA is enabled\", () => {\r",
+							"    pm.expect(jsonData.result.user.isTwoFactorEnabled).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User role is correct\", () => {\r",
+							"    pm.expect(jsonData.result.roles.some(role => role.roleName === (\"User\") && role.isAssigned)).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/User/GetUserForEdit?Id={{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"User",
+						"GetUserForEdit"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User/DeleteUser - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result should be null\", function () {\r",
+							"    pm.expect(jsonData.result).to.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"targetUrl should be null\", function () {\r",
+							"    pm.expect(jsonData.targetUrl).to.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Success is true\", function () {\r",
+							"    pm.expect(jsonData.success).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error is null\", function () {\r",
+							"    pm.expect(jsonData.error).to.be.null;\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/User/DeleteUser?Id={{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"User",
+						"DeleteUser"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "firstname",
+			"value": ""
+		},
+		{
+			"key": "lastname",
+			"value": ""
+		},
+		{
+			"key": "userName",
+			"value": ""
+		},
+		{
+			"key": "userEmail",
+			"value": ""
+		},
+		{
+			"key": "userPassword",
+			"value": ""
+		}
+	]
+}

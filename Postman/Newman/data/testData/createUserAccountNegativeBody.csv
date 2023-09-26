@@ -1,0 +1,9 @@
+﻿Dataset Name,firstname,lastname,username,useremail,password,statusCreate,statusErrorMsg
+Empty body,,,,,,400,Your request is not valid!
+No Name in body,,Johnson,StarGazer23,johndoe123@example.com,test,400,Your request is not valid!
+No Surname in body,Jiri,,PixelMaster77,sarahsmith45@gmail.com,test,400,Your request is not valid!
+No Username in body,Adam,Williams,,emilyjones22@yahoo.com,test,400,Your request is not valid!
+No Email in body,Honza,Zeli,jirizeli42,,test,400,Your request is not valid!
+ Wrong email - # instead of @,Jan,Jones,AdventureSeeker,samwilson55#icloud.com,test,400,Your request is not valid!
+ Wrong email - only @,Luk83,Davis,MusicLover92,@,test,400,Your request is not valid!
+Password is longer than 32 chars,David,Moore,TechSavvy101,annawalker23@yahoo.com,JcStwSzdKrZtuM3GjPckhZfJ2vg2QQyNQ,400,Your request is not valid!
