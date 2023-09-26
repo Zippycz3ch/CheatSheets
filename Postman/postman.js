@@ -110,3 +110,15 @@ pm.collectionVariables.set("firstname", pm.variables.replaceIn("{{$randomFirstNa
 pm.collectionVariables.set("lastname", pm.variables.replaceIn("{{$randomLastName}}"));
 pm.collectionVariables.set("username", pm.variables.replaceIn("{{$randomUserName}}"));
 pm.collectionVariables.set("useremail", pm.variables.replaceIn("{{$randomEmail}}"));
+
+pm.test('Schema is valid', function () {
+    pm.expect(tv4.validate(jsonData, schema)).to.be.true;
+});
+
+pm.test('Success is false', function () {
+    pm.expect(jsonData.success).to.be.false;
+});
+
+pm.test('unAuthorizedRequest is false', function () {
+    pm.expect(jsonData.unAuthorizedRequest).to.be.false;
+});

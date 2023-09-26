@@ -1,0 +1,36 @@
+// Pre
+
+let OrganizationUnitsIdArray = pm.globals.get("OrganizationUnitsIdArray");
+
+if (OrganizationUnitsIdArray.length > 0) {
+  const OrganizationUnitId = OrganizationUnitsIdArray.pop();
+  pm.globals.set("OrganizationUnitId", OrganizationUnitId)
+  pm.globals.set("OrganizationUnitsIdArray", OrganizationUnitsIdArray)
+} else {
+  console.log("OrganizationUnitsIdArray is empty or not set.");
+}
+
+// Post
+
+var jsonData = pm.response.json();
+let OrganizationUnitsIdArray = pm.globals.get("OrganizationUnitsIdArray");
+let htmlStatus = pm.response.code
+
+console.log(htmlStatus)
+
+if (OrganizationUnitsIdArray.length > 0) {
+    pm.test("Response status is 200", function () {
+        pm.response.to.have.status(200);
+    });
+} else {
+    pm.test("Response status is 400", function () {
+        pm.response.to.have.status(400);
+    });
+}
+
+if (OrganizationUnitsIdArray.length > 0) {
+  postman.setNextRequest("/api/services/app/OrganizationUnit/DeleteOrganizationUnit(Success - Delete all OrganazationUnits)");
+} else {
+  console.log("OrganizationUnitsIdArray is empty or not set.");
+}
+

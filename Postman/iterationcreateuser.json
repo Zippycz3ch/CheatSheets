@@ -1,0 +1,128 @@
+[{
+    "caseName":"Empty body",
+    "expectedStatus":500,
+    "body": {}
+},
+{
+    "caseName":"Only required fields in body",
+    "expectedStatus":500,
+    "body": {
+        "user": {
+            "name": "{{createduser_firstname}}",
+            "surname": "{{createduser_lastname}}",
+            "userName": "{{createduser_username}}",
+            "emailAddress": "{{createduser_useremail}}",
+            "password": "test"
+        },
+        "assignedRoleNames": ["User"]
+    }
+},
+{
+    "caseName":"No Name in body",
+    "expectedStatus":500,
+    "body": {
+        "user": {
+            "surname": "{{createduser_lastname}}",
+            "userName": "{{createduser_username}}",
+            "emailAddress": "{{createduser_useremail}}",
+            "password": "test"
+        },
+        "assignedRoleNames": ["User"]
+    }
+},
+{
+    "caseName":"No Surname in body",
+    "expectedStatus":500,
+    "body": {
+        "user": {
+            "name": "{{createduser_firstname}}",
+            "userName": "{{createduser_username}}",
+            "emailAddress": "{{createduser_useremail}}",
+            "password": "test"
+        },
+        "assignedRoleNames": ["User"]
+    }
+},
+{
+    "caseName":"No Username in body",
+    "expectedStatus":500,
+    "body": {
+        "user": {
+            "name": "{{createduser_firstname}}",
+            "surname": "{{createduser_lastname}}",
+            "emailAddress": "{{createduser_useremail}}",
+            "password": "test"
+        },
+        "assignedRoleNames": ["User"]
+    }
+},
+{
+    "caseName":"No Email in body",
+    "expectedStatus":500,
+    "body": {
+        "user": {
+            "name": "{{createduser_firstname}}",
+            "surname": "{{createduser_lastname}}",
+            "userName": "{{createduser_username}}",
+            "password": "test"
+        },
+        "assignedRoleNames": ["User"]
+    }
+},
+{
+    "caseName":"Wrong email - # instead of @",
+    "expectedStatus":500,
+    "body": {
+        "user": {
+            "name": "{{createduser_firstname}}",
+            "surname": "{{createduser_lastname}}",
+            "userName": "{{createduser_username}}",
+            "emailAddress": "foo#bar.cz",
+            "password": "test"
+        },
+        "assignedRoleNames": ["User"]
+    }
+},
+{
+    "caseName":"Only required fields in body",
+    "expectedStatus":500,
+    "body": {
+        "user": {
+            "name": "{{createduser_firstname}}",
+            "surname": "{{createduser_lastname}}",
+            "userName": "{{createduser_username}}",
+            "emailAddress": "@",
+            "password": "test"
+        },
+        "assignedRoleNames": ["User"]
+    }
+},
+{
+    "caseName":"Password is less than 4 chars",
+    "expectedStatus":500,
+    "body": {
+        "user": {
+            "name": "{{createduser_firstname}}",
+            "surname": "{{createduser_lastname}}",
+            "userName": "{{createduser_username}}",
+            "emailAddress": "{{createduser_useremail}}",
+            "password": "tst"
+        },
+        "assignedRoleNames": ["User"]
+    }
+},
+{
+    "caseName":"Password is longer than 32 chars",
+    "expectedStatus":500,
+    "body": {
+        "user": {
+            "name": "{{createduser_firstname}}",
+            "surname": "{{createduser_lastname}}",
+            "userName": "{{createduser_username}}",
+            "emailAddress": "{{createduser_useremail}}",
+            "password": "JcStwSzdKrZtuM3GjPckhZfJ2vg2QQyNQ"
+        },
+        "assignedRoleNames": ["User"]
+    }
+},
+]
