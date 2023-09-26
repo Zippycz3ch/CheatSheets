@@ -5,6 +5,14 @@
 // PATCH - REPLACE
 // DELETE - DELETE
 
+// Postman stores variables as strings. If you store objects or arrays, remember to 
+JSON.stringify() 
+// them before storing, and
+ JSON.parse()
+// them when you retrieve them.
+
+
+
 // Postman request with Query Params & Path var
 
 {{baseUrl}}/1/boards/:id?key={{trelloKey}}&token={{trelloToken}}
@@ -91,3 +99,14 @@ const person = {
     isMaried: false,
     sayHello: function (){return 'Hello, my name is ' + this.firstName; }
 };
+
+var requestBody = JSON.parse(pm.request.body.raw);
+let jobName = requestBody.jobs[0].name
+console.log(jobName)
+
+pm.globals.set("jobName",jobName)
+
+pm.collectionVariables.set("firstname", pm.variables.replaceIn("{{$randomFirstName}}"));
+pm.collectionVariables.set("lastname", pm.variables.replaceIn("{{$randomLastName}}"));
+pm.collectionVariables.set("username", pm.variables.replaceIn("{{$randomUserName}}"));
+pm.collectionVariables.set("useremail", pm.variables.replaceIn("{{$randomEmail}}"));
