@@ -1,0 +1,833 @@
+{
+	"info": {
+		"_postman_id": "526342ce-9636-4e76-a889-10270ac40caf",
+		"name": "deviceE2ECLI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28992079"
+	},
+	"item": [
+		{
+			"name": "/api/device/auth - Success",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let serialNumber = pm.collectionVariables.replaceIn(\"{{$randomFirstName}}\");\r",
+							"let clientId = \"device\"\r",
+							"let printerBrand = \"Kyocera\"\r",
+							"\r",
+							"pm.collectionVariables.set(\"serialNumber\", serialNumber);\r",
+							"pm.collectionVariables.set(\"clientId\", clientId);\r",
+							"pm.collectionVariables.set(\"printerBrand\", printerBrand);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"let device_code = jsonData.device_code;\r",
+							"let device_user_code = jsonData.user_code;\r",
+							"let verification_uri = jsonData.verification_uri;\r",
+							"let verification_uri_complete = jsonData.verification_uri_complete;\r",
+							"let qr_code_type = 0;\r",
+							"\r",
+							"pm.collectionVariables.set(\"device_code\", device_code);\r",
+							"pm.collectionVariables.set(\"device_user_code\", device_user_code);\r",
+							"pm.collectionVariables.set(\"verification_uri\", verification_uri);\r",
+							"pm.collectionVariables.set(\"verification_uri_complete\", verification_uri_complete);\r",
+							"pm.collectionVariables.set(\"verification_api_uri\", verification_uri);\r",
+							"pm.collectionVariables.set(\"verification_api_uri_complete\", verification_uri_complete);\r",
+							"pm.collectionVariables.set('qr_code_type', qr_code_type);\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"device_id is an number\", function () {\r",
+							"    pm.expect(jsonData.device_id).to.be.a('number');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"device_code should be a non-empty string\", function () {\r",
+							"    pm.expect(jsonData.device_code).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"user_code is a non-empty string\", function () {\r",
+							"    pm.expect(jsonData).to.be.an('object');\r",
+							"    pm.expect(jsonData.user_code).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"verification_uri is a non-empty string\", function () {\r",
+							"    pm.expect(jsonData.verification_uri).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body structure is valid\", function () {\r",
+							"    pm.expect(jsonData).to.be.an('object').that.has.all.keys('device_id', 'device_code', 'user_code', 'verification_uri', 'verification_uri_complete', 'verification_api_uri', 'verification_api_uri_complete', 'expires_in', 'interval');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"device_code is a non-empty string\", function () {\r",
+							"    pm.expect(jsonData.device_code).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"user_code is a non-empty string\", function () {\r",
+							"    pm.expect(jsonData.user_code).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"verification_uri is a non-empty string\", function () {\r",
+							"    pm.expect(jsonData.verification_uri).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "client_id=device&serial_number={{serialNumber}}&brand=Kyocera"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/device/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"device",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5 second wait",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"setTimeout(function(){}, 5000);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/CommonInfo/GetSupportedVersion",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"CommonInfo",
+						"GetSupportedVersion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/device/token - Authorization pending",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error field is present in the response\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.be.an('object');\r",
+							"    pm.expect(jsonData.error).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error matches\", () => {\r",
+							"    pm.expect(jsonData.error).to.equal(\"authorization_pending\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": " application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "client_id=device&device_Code={{device_code}}&grant_type=urn:ietf:params:oauth:grant-type:device_code"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/device/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"device",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/device/auth - Success",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"let device_code = jsonData.device_code;\r",
+							"let device_user_code = jsonData.user_code;\r",
+							"let verification_uri = jsonData.verification_uri;\r",
+							"let verification_uri_complete = jsonData.verification_uri_complete;\r",
+							"let qr_code_type = 0;\r",
+							"\r",
+							"pm.collectionVariables.set(\"device_code\", device_code);\r",
+							"pm.collectionVariables.set(\"device_user_code\", device_user_code);\r",
+							"pm.collectionVariables.set(\"verification_uri\", verification_uri);\r",
+							"pm.collectionVariables.set(\"verification_uri_complete\", verification_uri_complete);\r",
+							"pm.collectionVariables.set(\"verification_api_uri\", verification_uri);\r",
+							"pm.collectionVariables.set(\"verification_api_uri_complete\", verification_uri_complete);\r",
+							"pm.collectionVariables.set('qr_code_type', qr_code_type);\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"device_id is an number\", function () {\r",
+							"    pm.expect(jsonData.device_id).to.be.a('number');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"device_code should be a non-empty string\", function () {\r",
+							"    pm.expect(jsonData.device_code).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"user_code is a non-empty string\", function () {\r",
+							"    pm.expect(jsonData).to.be.an('object');\r",
+							"    pm.expect(jsonData.user_code).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"verification_uri is a non-empty string\", function () {\r",
+							"    pm.expect(jsonData.verification_uri).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body structure is valid\", function () {\r",
+							"    pm.expect(jsonData).to.be.an('object').that.has.all.keys('device_id', 'device_code', 'user_code', 'verification_uri', 'verification_uri_complete', 'verification_api_uri', 'verification_api_uri_complete', 'expires_in', 'interval');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"device_code is a non-empty string\", function () {\r",
+							"    pm.expect(jsonData.device_code).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"user_code is a non-empty string\", function () {\r",
+							"    pm.expect(jsonData.user_code).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"verification_uri is a non-empty string\", function () {\r",
+							"    pm.expect(jsonData.verification_uri).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "client_id=device&serial_number={{serialNumber}}&brand=Kyocera"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/device/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"device",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/device/pair - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"let printer_id = jsonData.result.id;\r",
+							"let displayName = jsonData.result.displayName\r",
+							"console.log(printer_id)\r",
+							"pm.collectionVariables.set(\"printer_id\", printer_id);\r",
+							"pm.collectionVariables.set(\"displayName\", displayName);\r",
+							"\r",
+							"pm.test(\"A result property is present and has all expected fields'\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.result).to.have.property('tenantId');\r",
+							"    pm.expect(jsonData.result).to.have.property('displayName');\r",
+							"    pm.expect(jsonData.result).to.have.property('brand');\r",
+							"    pm.expect(jsonData.result).to.have.property('serialNumber');\r",
+							"    pm.expect(jsonData.result).to.have.property('isActive');\r",
+							"    pm.expect(jsonData.result).to.have.property('id');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"success is true\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.success).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"error is null\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error).to.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"unAuthorizedRequest is false\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.unAuthorizedRequest).to.be.false;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Brand matches\", () => {\r",
+							"    pm.expect(jsonData.result.brand).to.equal(\"Kyocera\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/device/pair?code={{device_user_code}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"device",
+						"pair"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "{{device_user_code}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5 second wait",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"setTimeout(function(){}, 5000);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/CommonInfo/GetSupportedVersion",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"CommonInfo",
+						"GetSupportedVersion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/device/token - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"let device_access_token = jsonData.access_token;\r",
+							"let device_refresh_token = jsonData.refresh_token\r",
+							"let device_id = jsonData.device_id;\r",
+							"\r",
+							"pm.collectionVariables.set(\"device_access_token\", device_access_token);\r",
+							"pm.collectionVariables.set(\"device_refresh_token\", device_refresh_token);\r",
+							"pm.collectionVariables.set(\"device_id\", device_id);\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response has the required properties\", function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('access_token');\r",
+							"    pm.expect(pm.response.json()).to.have.property('token_type');\r",
+							"    pm.expect(pm.response.json()).to.have.property('refresh_token');\r",
+							"    pm.expect(pm.response.json()).to.have.property('device_id');\r",
+							"    pm.expect(pm.response.json()).to.have.property('refresh_token_expires_in');\r",
+							"    pm.expect(pm.response.json()).to.have.property('expires_in');\r",
+							"    pm.expect(pm.response.json()).to.have.property('control_key');\r",
+							"    pm.expect(pm.response.json()).to.have.property('remote_control');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"device_id is correct\", function () {\r",
+							"    pm.expect(jsonData.device_id).to.eql(pm.collectionVariables.get(\"device_id\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "client_id=device&device_Code={{device_code}}&grant_type=urn:ietf:params:oauth:grant-type:device_code"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/device/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"device",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Printers/GetPrinterForView - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"var printer_id = responseData.result.printer.id;\r",
+							"console.log(printer_id)\r",
+							"pm.collectionVariables.set(\"printer_id\", printer_id);\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"displayName is a non-empty string\", function () {\r",
+							"    pm.expect(responseData.result.printer.displayName).to.be.a('string').and.to.have.length.above(0, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Brand is a non-empty string\", function () {\r",
+							"    pm.expect(responseData.result.printer.brand).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Serial number should be a non-empty string\", function () {\r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.result.printer.serialNumber).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Schema is valid\", function () {\r",
+							"    var schema = {\r",
+							"        type: \"object\",\r",
+							"        properties: {\r",
+							"            result: {\r",
+							"                type: \"object\",\r",
+							"                properties: {\r",
+							"                    printer: {\r",
+							"                        type: \"object\",\r",
+							"                        properties: {\r",
+							"                            displayName: { type: \"string\" },\r",
+							"                            brand: { type: \"string\" },\r",
+							"                            serialNumber: { type: \"string\" },\r",
+							"                            deviceModel: { type: [\"object\", \"null\"] },\r",
+							"                            fwVersion: { type: [\"string\", \"null\"] },\r",
+							"                            hostName: { type: \"string\" },\r",
+							"                            ipAddress: { type: \"string\" },\r",
+							"                            dealerCatalogNumber: { type: [\"string\", \"null\"] },\r",
+							"                            isActive: { type: \"boolean\" },\r",
+							"                            creationTime: { type: \"string\" },\r",
+							"                            lastModificationTime: { type: \"string\" },\r",
+							"                            toners: {\r",
+							"                                type: \"object\",\r",
+							"                                properties: {\r",
+							"                                    remaining: {\r",
+							"                                        type: \"object\",\r",
+							"                                        properties: {\r",
+							"                                            black: { type: \"number\" },\r",
+							"                                            cyan: { type: \"number\" },\r",
+							"                                            magenta: { type: \"number\" },\r",
+							"                                            yellow: { type: \"number\" }\r",
+							"                                        }\r",
+							"                                    },\r",
+							"                                    total: {\r",
+							"                                        type: \"object\",\r",
+							"                                        properties: {\r",
+							"                                            black: { type: \"number\" },\r",
+							"                                            cyan: { type: \"number\" },\r",
+							"                                            magenta: { type: \"number\" },\r",
+							"                                            yellow: { type: \"number\" }\r",
+							"                                        }\r",
+							"                                    },\r",
+							"                                    hasValues: { type: \"boolean\" },\r",
+							"                                    lastUpdateAt: { type: \"string\" }\r",
+							"                                }\r",
+							"                            },\r",
+							"                            counters: {\r",
+							"                                type: \"object\",\r",
+							"                                properties: {\r",
+							"                                    printTotalColor: { type: \"number\" },\r",
+							"                                    printTotalMono: { type: \"number\" },\r",
+							"                                    copyTotalColor: { type: \"number\" },\r",
+							"                                    copyTotalMono: { type: \"number\" },\r",
+							"                                    scanTotal: { type: \"number\" },\r",
+							"                                    print: { type: \"object\" },\r",
+							"                                    copy: { type: \"object\" },\r",
+							"                                    hasValues: { type: \"boolean\" },\r",
+							"                                    lastUpdateAt: { type: \"string\" }\r",
+							"                                }\r",
+							"                            },\r",
+							"                            printerLogins: { type: \"array\" },\r",
+							"                            isMonochromatic: { type: \"boolean\" },\r",
+							"                            hasTerminal: { type: \"boolean\" },\r",
+							"                            id: { type: \"number\" }\r",
+							"                        },\r",
+							"                        required: [\"displayName\", \"brand\", \"serialNumber\", \"hostName\", \"ipAddress\", \"isActive\", \"creationTime\", \"lastModificationTime\", \"toners\", \"counters\", \"printerLogins\", \"isMonochromatic\", \"hasTerminal\", \"id\"]\r",
+							"                    },\r",
+							"                    blob: { type: [\"object\", \"null\"] }\r",
+							"                },\r",
+							"                required: [\"printer\"]\r",
+							"            },\r",
+							"            targetUrl: { type: [\"string\", \"null\"] },\r",
+							"            success: { type: \"boolean\" },\r",
+							"            error: { type: [\"object\", \"null\"] },\r",
+							"            unAuthorizedRequest: { type: \"boolean\" },\r",
+							"            __abp: { type: \"boolean\" }\r",
+							"        },\r",
+							"        required: [\"result\", \"success\", \"unAuthorizedRequest\", \"__abp\"]\r",
+							"    };\r",
+							"\r",
+							"    var response = pm.response.json();\r",
+							"    pm.expect(tv4.validate(response, schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/Printers/GetPrinterForView?id={{printer_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"Printers",
+						"GetPrinterForView"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{printer_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Printers/Delete - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Success is true\", function () {\r",
+							"    pm.expect(jsonData.success).to.equal(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"error is true\", function () {\r",
+							"    pm.expect(jsonData.error).to.equal(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"unAuthorizedRequest is false\", function () {\r",
+							"    pm.expect(jsonData.unAuthorizedRequest).to.eql(false);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/Printers/Delete?Id={{printer_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"Printers",
+						"Delete"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "{{printer_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Printers/GetPrinterForView - Failure",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response status is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"A result property is present and is null\", function () {\r",
+							"    pm.expect(jsonData.result).to.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"The success property is false\", function () {\r",
+							"    pm.expect(jsonData.success).to.be.false;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"The error property is an object with code property\", function () {\r",
+							"    pm.expect(jsonData.error).to.be.an('object').that.has.property('code');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"The unAuthorizedRequest property is false\", function () {\r",
+							"    pm.expect(jsonData.unAuthorizedRequest).to.be.false;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"The __abp property is true\", function () {\r",
+							"    pm.expect(jsonData.__abp).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Schema is valid\", function () {\r",
+							"    var schema = {\r",
+							"        type: \"object\",\r",
+							"        properties: {\r",
+							"            result: {\r",
+							"                type: \"null\"\r",
+							"            },\r",
+							"            targetUrl: {\r",
+							"                type: \"null\"\r",
+							"            },\r",
+							"            success: {\r",
+							"                type: \"boolean\"\r",
+							"            },\r",
+							"            error: {\r",
+							"                type: \"object\",\r",
+							"                properties: {\r",
+							"                    code: {\r",
+							"                        type: \"number\"\r",
+							"                    },\r",
+							"                    message: {\r",
+							"                        type: \"string\"\r",
+							"                    },\r",
+							"                    details: {\r",
+							"                        type: \"null\"\r",
+							"                    },\r",
+							"                    validationErrors: {\r",
+							"                        type: \"null\"\r",
+							"                    }\r",
+							"                },\r",
+							"                required: [\"code\", \"message\"]\r",
+							"            },\r",
+							"            unAuthorizedRequest: {\r",
+							"                type: \"boolean\"\r",
+							"            },\r",
+							"            __abp: {\r",
+							"                type: \"boolean\"\r",
+							"            }\r",
+							"        },\r",
+							"        required: [\"result\", \"targetUrl\", \"success\", \"error\", \"unAuthorizedRequest\", \"__abp\"]\r",
+							"    };\r",
+							"\r",
+							"    var response = pm.response.json();\r",
+							"    pm.expect(tv4.validate(response, schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/Printers/GetPrinterForView?id={{printer_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"Printers",
+						"GetPrinterForView"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{printer_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
