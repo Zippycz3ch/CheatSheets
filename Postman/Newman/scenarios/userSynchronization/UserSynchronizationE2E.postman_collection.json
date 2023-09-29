@@ -1,0 +1,582 @@
+{
+	"info": {
+		"_postman_id": "302d9369-4f5f-45b1-92b5-e4e8bb5dbc5e",
+		"name": "UserSynchronization E2E",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28992079"
+	},
+	"item": [
+		{
+			"name": "UserSynchronization/GetConnector - Success - No app configured",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Success is True\", () => {\r",
+							"    pm.expect(jsonData.success).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error is null\", () => {\r",
+							"    pm.expect(jsonData.error).to.eql(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"applicationID is null\", () => {\r",
+							"    pm.expect(jsonData.result.userSynchronizationDto.applicationID).to.eql(null);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/UserSynchronization/GetConnector?Type=0",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"UserSynchronization",
+						"GetConnector"
+					],
+					"query": [
+						{
+							"key": "Type",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSynchronization/ConfigureConnector - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Success is true\", () => {\r",
+							"    pm.expect(jsonData.success).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error is null\", () => {\r",
+							"    pm.expect(jsonData.error).to.eql(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"adGroupID is correct\", function () {\r",
+							"    pm.expect(pm.iterationData.get(\"adGroupID\")).to.eql(jsonData.result.adGroupID);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"directoryID is correct\", function () {\r",
+							"    pm.expect(pm.iterationData.get(\"directoryID\")).to.eql(jsonData.result.directoryID);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"applicationID is correct\", function () {\r",
+							"    pm.expect(pm.iterationData.get(\"applicationID\")).to.eql(jsonData.result.applicationID);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"applicationID\": \"{{applicationID}}\",\r\n  \"directoryID\": \"{{directoryID}}\",\r\n  \"applicationSecret\": \"{{applicationSecret}}\",\r\n  \"adGroupID\": \"{{adGroupID}}\",\r\n  \"isAutoSyncEnabled\": \"{{isAutoSyncEnabled}}\",\r\n  \"canCombineAlias\": \"{{canCombineAlias}}\",\r\n  \"sendWelcomeEmails\": \"{{sendWelcomeEmails}}\",\r\n  \"manageExistingUsers\": \"{{manageExistingUsers}}\",\r\n  \"userSynchronizationType\": {{userSynchronizationType}},\r\n  \"synchronizeAllGroupsAndUsers\": \"{{synchronizeAllGroupsAndUsers}}\",\r\n  \"createAliasWithoutInvalidCharacters\": \"{{createAliasWithoutInvalidCharacters}}\",\r\n  \"allowUseDisplayname\": \"{{allowUseDisplayname}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/UserSynchronization/ConfigureConnector",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"UserSynchronization",
+						"ConfigureConnector"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSynchronization/GetConnector - Success - App configured, before sych",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Success is true\", () => {\r",
+							"    pm.expect(jsonData.success).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error is null\", () => {\r",
+							"    pm.expect(jsonData.error).to.eql(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"adGroupID is correct\", () => {\r",
+							"    pm.expect(pm.iterationData.get(\"adGroupID\")).to.eql(jsonData.result.userSynchronizationDto.adGroupID);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"directoryID is correct\", function () {\r",
+							"    pm.expect(pm.iterationData.get(\"directoryID\")).to.eql(jsonData.result.userSynchronizationDto.directoryID);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"applicationID is correct\", function () {\r",
+							"    pm.expect(pm.iterationData.get(\"applicationID\")).to.eql(jsonData.result.userSynchronizationDto.applicationID);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/UserSynchronization/GetConnector?Type=0",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"UserSynchronization",
+						"GetConnector"
+					],
+					"query": [
+						{
+							"key": "Type",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSynchronization/EnqueueSynchronizationJob - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Success is true\", () => {\r",
+							"    pm.expect(jsonData.success).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error is null\", () => {\r",
+							"    pm.expect(jsonData.error).to.eql(null);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/UserSynchronization/EnqueueSynchronizationJob",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"UserSynchronization",
+						"EnqueueSynchronizationJob"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSynchronization/GetLog - Success - Checklog for user counts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"// Condition 1: Difference check between remoteCloudUsersToSynchronizeCount and synchronizedUsersCountInRoger.\r",
+							"// Condition 2: Check if remoteCloudUsersToSynchronizeCount equals the sum of synchronizedUsersCountInRoger and skippedUsersCount.\r",
+							"\r",
+							"if (\r",
+							"  jsonData.result.remoteCloudUsersToSynchronizeCount !== jsonData.result.synchronizedUsersCountInRoger &&\r",
+							"  jsonData.result.remoteCloudUsersToSynchronizeCount !== jsonData.result.synchronizedUsersCountInRoger + jsonData.result.skippedUsersCount\r",
+							") {\r",
+							"  postman.setNextRequest(\"UserSynchronization/GetLog - Success - Checklog for user counts\");\r",
+							"} else {\r",
+							"  if (jsonData.result.skippedUsersCount > 0) {\r",
+							"    pm.test(\"USERS SKIPPED DURING SYNC: remoteCloudUsersToSynchronizeCount and (synchronizedUsersCountInRoger + skippedUsersCount) are equal\", function () {\r",
+							"      pm.expect(jsonData.result.remoteCloudUsersToSynchronizeCount).to.eql(jsonData.result.synchronizedUsersCountInRoger + jsonData.result.skippedUsersCount);\r",
+							"    });\r",
+							"    console.log(\"Users skipped during sync: \" + jsonData.result.skippedUsersCount);\r",
+							"  } else {\r",
+							"    pm.test(\"remoteCloudUsersToSynchronizeCount and synchronizedUsersCountInRoger are equal\", function () {\r",
+							"      pm.expect(jsonData.result.remoteCloudUsersToSynchronizeCount).to.eql(jsonData.result.synchronizedUsersCountInRoger);\r",
+							"    });\r",
+							"    pm.test(\"No skipped users during sync\", function () {\r",
+							"      pm.expect(jsonData.result.skippedUsersCount).to.eql(0);\r",
+							"    });\r",
+							"  }\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"setTimeout(function(){}, 5000);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/UserSynchronization/GetLog",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"UserSynchronization",
+						"GetLog"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users - Get all non admin IDs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"const usersIdArray = jsonData.result.items\r",
+							"    .filter(item => item.roles[0].roleName !== \"Admin\")\r",
+							"    .map(item => item.id);\r",
+							"\r",
+							"pm.collectionVariables.set(\"usersIdArray\", usersIdArray)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"maxResultCount\": 1000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/User/GetUsers",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"User",
+						"GetUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user - Delete all non admin users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var usersIdArray = pm.collectionVariables.get('usersIdArray')\r",
+							"const usersCounter = usersIdArray.length;\r",
+							"\r",
+							"if (usersCounter > 0) {\r",
+							"    postman.setNextRequest(\"Delete user - Delete all non admin users\");\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result should be null\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.result).to.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"targetUrl should be null\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.targetUrl).to.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Success is true\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.success).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error is null\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.error).to.be.null;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let usersIdArray = pm.collectionVariables.get(\"usersIdArray\");\r",
+							"\r",
+							"if (usersIdArray.length > 0) {\r",
+							"  const userId = usersIdArray.pop();\r",
+							"  pm.collectionVariables.set(\"userId\", userId)\r",
+							"  pm.collectionVariables.set(\"usersIdArray\", usersIdArray)\r",
+							"} else {\r",
+							"  console.log(\"usersIdArray is empty or not set.\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/User/DeleteUser?id={{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"User",
+						"DeleteUser"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSynchronization/DeleteConnector - Success",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/services/app/UserSynchronization/DeleteConnector?Type=1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"services",
+						"app",
+						"UserSynchronization",
+						"DeleteConnector"
+					],
+					"query": [
+						{
+							"key": "Type",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
