@@ -1,0 +1,20 @@
+{
+  "user": {
+    "name": "Alek",
+    "surname": "Macejkovic", 
+    "userName": "Lessie.Hintz69",
+    "emailAddress": "Rosemarie58@yahoo.com",
+    "phoneNumber": "",
+    "password": "xL9e3TOLU5Jki8W",
+    "isActive": true,
+    "shouldChangePasswordOnNextLogin": true,
+    "isTwoFactorEnabled": true,
+    "isLockoutEnabled": false
+  },
+  "assignedRoleNames": ["User"],
+  "sendActivationEmail": false,
+  "setRandomPassword": false,
+  "organizationUnits": [],
+  "resetPin": true,
+  "cards": null
+}

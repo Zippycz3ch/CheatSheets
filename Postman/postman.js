@@ -23,10 +23,17 @@ pm.test("Status code is 200", function () {
     pm.response.to.have.status(200);
 });
 
+
+// Extractin variables
 // Parsing json response
 var jsonData = pm.response.json();
 
 const idBoard = jsonData.id;
+
+// Parsing json response
+
+var requestBody = JSON.parse(pm.request.body.raw);
+let jobName = requestBody.jobs[0].name
 
 // Set and get for collection variables
 const constnameX = pm.collectionVariables.get("constnameX");
@@ -121,4 +128,54 @@ pm.test('Success is false', function () {
 
 pm.test('unAuthorizedRequest is false', function () {
     pm.expect(jsonData.unAuthorizedRequest).to.be.false;
+});
+
+var jsonData = pm.response.json();
+const AbpTenantId = jsonData.result.items[0].id;
+pm.collectionVariables.set("AbpTenantId",AbpTenantId);
+
+pm.collectionVariables.set("AbpTenantId", pm.response.json().result.items[0].id);
+
+var jsonData = pm.response.json();
+
+pm.test('Success is true', function () {
+    pm.expect(jsonData.success).to.be.true;
+});
+
+pm.test('unAuthorizedRequest is false', function () {
+    pm.expect(jsonData.unAuthorizedRequest).to.be.false;
+});
+
+pm.test('Error is null', function () {
+    pm.expect(jsonData.error).to.be.null;
+});
+
+pm.test("Validate the result object", function () {
+    pm.expect(jsonData.result).to.exist.and.to.be.an('object');
+});
+
+pm.test("Email matches", () => {
+    pm.expect(jsonData.result.user.emailAddress).to.eql(pm.collectionVariables.get("userEmail"));
+});
+
+pm.test("ID matches", () => {
+    pm.expect(jsonData.result.user.id).to.eql(pm.collectionVariables.get("userId"));
+});
+
+pm.test("User is active", () => {
+    pm.expect(jsonData.result.user.isActive).to.eql(true);
+});
+
+pm.test("User role is correct", () => {
+    pm.expect(jsonData.result.roles.some(role => role.roleName === ("Admin") && role.isAssigned)).to.eql(true);
+});
+
+result.printer.isActive
+
+pm.test("Printer is active", () => {
+    pm.expect(jsonData.result.printer.isActive).to.eql(true);
+});
+
+pm.test("ID matches", () => {
+    pm.expect(jsonData.result.printer.id).to.eql(pm.collectionVariables.get("printer_id"));
 });
