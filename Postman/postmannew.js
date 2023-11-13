@@ -77,3 +77,33 @@ pm.environment.get("variable_key");
 
 // Use let to create local variable 
 let variable = pm.collectionVariables.get("variable_key");
+
+// Basic test for Roger valid response
+
+var jsonData = pm.response.json();
+
+pm.test("Response status code is 200", function () {
+    pm.expect(pm.response.code).to.equal(200);
+});
+
+pm.test("Response time is less than 500ms", function () {
+    pm.expect(pm.response.responseTime).to.be.below(500);
+});
+
+pm.test('Success is true', function () {
+    pm.expect(jsonData.success).to.be.true;
+});
+
+pm.test('unAuthorizedRequest is false', function () {
+    pm.expect(jsonData.unAuthorizedRequest).to.be.false;
+});
+
+pm.test('Error is null', function () {
+    pm.expect(jsonData.error).to.be.null;
+});
+
+// JSON Scheme validation
+
+pm.test("Response matches schema", function () {
+    pm.expect(jsonData).to.have.jsonSchema(schema);
+});

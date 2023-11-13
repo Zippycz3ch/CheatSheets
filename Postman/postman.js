@@ -118,8 +118,8 @@ pm.collectionVariables.set("lastname", pm.variables.replaceIn("{{$randomLastName
 pm.collectionVariables.set("username", pm.variables.replaceIn("{{$randomUserName}}"));
 pm.collectionVariables.set("useremail", pm.variables.replaceIn("{{$randomEmail}}"));
 
-pm.test('Schema is valid', function () {
-    pm.expect(tv4.validate(jsonData, schema)).to.be.true;
+pm.test("Response matches schema", function () {
+    pm.expect(jsonData).to.have.jsonSchema(schema);
 });
 
 pm.test('Success is false', function () {
@@ -137,6 +137,10 @@ pm.collectionVariables.set("AbpTenantId",AbpTenantId);
 pm.collectionVariables.set("AbpTenantId", pm.response.json().result.items[0].id);
 
 var jsonData = pm.response.json();
+
+pm.test("Response status code is 200", function () {
+    pm.expect(pm.response.code).to.equal(200);
+});
 
 pm.test('Success is true', function () {
     pm.expect(jsonData.success).to.be.true;
