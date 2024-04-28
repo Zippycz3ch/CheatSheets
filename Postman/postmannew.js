@@ -60,9 +60,12 @@ let idBoard = requestBody.id
 // Setting variables
 
 // Set collection variable
-// First is name of variable, second is the value. Dont use double or any qoutes on the value
+// First is name of variable, second is the value. 
 pm.collectionVariables.set("idBoard", idBoard);     // Saves 24 as int
 pm.collectionVariables.set("idBoard", "idBoard");     // Saves "idBoard" as string
+
+pm.collectionVariables.set("adGroupID","ab427dec-e642-4927-b2e8-151d35f1d23e") // save string as string
+
 
 // Use scopes for setting different scope variable
 // Set global variable
@@ -80,6 +83,13 @@ JSON.stringify()
 
 // and parse them when you retrieve them.
 JSON.parse()
+
+// Unsetting
+// If you need to clear your variable
+
+pm.environment.unset('myVariableName');
+pm.collectionVariables.unset('myVariableName');
+
 
 
 // Getting variables
